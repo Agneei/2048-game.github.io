@@ -6,8 +6,8 @@ function showNumberMove(i,j,randNumber) {
     numberCell.text(randNumber);
 
     numberCell.animate({
-        width:'100px',
-        height:'100px',
+        width:cellWidth,
+        height:cellWidth,
         top:getPosTop(i,j),
         left:getPosLeft(i,j),
     },500);
@@ -20,3 +20,4 @@ function showNumKeyMove(fromX,fromY,toX,toY){
         left:getPosLeft(toX,toY),
     },200);
 }
+

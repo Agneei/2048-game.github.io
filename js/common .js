@@ -1,10 +1,17 @@
+//移动端尺寸
+var screenWidth=window.screen.availWidth;
+var documentWidth=document.documentElement.clientWidth;//页面DOM宽度
+var containerWidth=documentWidth*0.92;//容器宽度
+var cellWidth=documentWidth*0.18;
+var cellSpace=documentWidth*0.04;
+
 //获取上边位置
 function getPosTop(i,j) {
-	return i*120+20;
+	return cellSpace+(cellWidth+cellSpace)*i;
 }
 //获取左边位置
 function getPosLeft(i,j){
-	return j*120+20;
+	return cellSpace+(cellWidth+cellSpace)*j;
 }
 //获取数字背景颜色方式
 function getBgColor(num){
@@ -83,10 +90,10 @@ function canMoveRight(nums) {
 }
 //上移
 function canMoveUp(nums) {
-	for(var j=0;j<4;j++){
-		for(var i=1;i<4;i++){
-			if(nums[i][j]!==0){
-				if(nums[i-1][j]===0 || nums[i-1][j]===nums[i][j]){
+	for(var i=1;i<4;i++) {
+		for (var j = 0; j < 4; j++) {
+			if (nums[i][j] !== 0) {
+				if (nums[i-1][j] === 0 || nums[i-1][j] === nums[i][j]) {
 					return true;
 				}
 			}
@@ -96,8 +103,8 @@ function canMoveUp(nums) {
 }
 //下移
 function canMoveDown(nums) {
-	for(var j=0;j<4;j++){
-		for(var i=0;i<3;i++){
+	for(var i=0;i<3;i++){
+		for(var j=0;j<4;j++){
 			if(nums[i][j]!==0){
 				if(nums[i+1][j]===0 || nums[i+1][j]===nums[i][j]){
 					return true;
@@ -109,8 +116,8 @@ function canMoveDown(nums) {
 }
 //判断水平方向上是否有障碍物
 function noBlockH(row,col1,col2,nums) {
-	for(var i=col1+1;i<col2;i++){
-		if (nums[row][i]!==0){
+	for(var j=col1+1;j<col2;j++){
+		if (nums[row][j]!==0){
 			return false;
 		}
 	}
@@ -128,4 +135,9 @@ function noBlockV(col,row1,row2,nums) {
 //更新分数
 function  updateScore(score) {
 	$('#score').text(score);
+}
+
+//游戏已结束
+function gameOver() {
+
 }

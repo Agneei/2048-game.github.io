@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1,user-scalable=no">
     <link href="https://fonts.googleapis.com/css?family=Lobster|Arapey|Fauna One" rel="stylesheet" type="text/css">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <script src="js/jquery-3.4.1.js"></script>
@@ -14,7 +14,8 @@
 <body>
     <div class="wrap">
         <div id="header">
-            <h1 class="title">2048</h1>
+            <h1><span class="title">2048</span></h1>
+            <div><span class="face">ヾ(๑╹◡╹)ﾉ”</span></div>
             <h3><a class="author" href="#">Created by @Agneei</a></h3>
             <div style="clear: both"></div>
             <div class="wrapper">
@@ -46,8 +47,27 @@
             <div class="grid-cell" id="grid-cell-3-2"></div>
             <div class="grid-cell" id="grid-cell-3-3"></div>
         </div>
-        <div class="music">
-            <audio autoplay="" src="music/limbo - airplane mode.mp3" controls=""></audio>
+        <div id="audioBox">
+            <script type="text/javascript">
+                window.onload = function(){
+                    var arr = [src="music/ぼくのりりっくのぼうよみ - subobjective.mp3",src="music/limbo - airplane mode.mp3"]; //把需要播放的歌曲从后往前排，这里已添加两首音乐，可继续添加多个音乐
+                    var myAudio = new Audio();
+                    myAudio.preload = true;
+                    myAudio.controls = true;
+                    myAudio.src = arr.pop();         //每次读数组最后一个元素
+                    myAudio.addEventListener('ended', playEndedHandler, false);
+                    myAudio.play();
+                    document.getElementById("audioBox").appendChild(myAudio);
+                    myAudio.loop = false;//禁止循环，否则无法触发ended事件
+                    myAudio.autoplay = true;
+                    function playEndedHandler(){
+                        myAudio.src = arr.pop();
+                        myAudio.play();
+                        console.log(arr.length);
+                        !arr.length && myAudio.removeEventListener('ended',playEndedHandler,false);//只有一个元素时解除绑定
+                    }
+                }
+            </script>
         </div>
     </div>
 

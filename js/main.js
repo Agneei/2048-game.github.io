@@ -1,17 +1,40 @@
 var nums =[];
 var score=0;
-var superPosition=[];           //是否叠加，用来解决单元格重复叠加的问题
+var hasConflicted=[];           //是否叠加，用来解决单元格重复叠加的问题
 $(document).ready(function () {
 	newgame();
 });
 //start new game
 function newgame() {
+	if(documentWidth>500){
+		containerWidth=500;
+		cellWidth=100;
+		cellSpace=20;
+	}
+	else{
+		//设置移动端
+		settingForMobile();
+	}
+
 	init();
 	//在随机的两个单元格中生成数字
 	generateOneNumber();
 	generateOneNumber();
 }
-//initial
+//移动端
+function settingForMobile() {
+	$('#header').css('width',containerWidth);
+
+	$('#grid-container').css('width',containerWidth-cellSpace*2);
+	$('#grid-container').css('height',containerWidth-cellSpace*2);
+	$('#grid-container').css('padding',cellSpace);
+	$('#grid-container').css('border-radius',containerWidth*0.02);
+
+	$('.grid-cell').css('width',cellWidth);
+	$('.grid-cell').css('height',cellWidth);
+	$('.grid-cell').css('border-radius',cellWidth*0.06);
+}
+//initialize
 function init() {
 	for (var i=0;i<4;i++) {
 		for (var j=0;j<4;j++) {
@@ -23,10 +46,10 @@ function init() {
 	//初始化数组
 	for(var k=0;k<4;k++){
 		nums[k]=[];
-		superPosition[k]=false;
+		hasConflicted[k]=[];
 		for(var l=0;l<4;l++){
 			nums[k][l]=0;
-			superPosition[k][l]=false;
+			hasConflicted[k][l]=false;
 		}
 	}
 	
@@ -47,18 +70,22 @@ function updateView() {
 			if(nums[i][j]===0){
 				numberCell.css('width','0px');
 				numberCell.css('height','0px');
-				numberCell.css('top',getPosTop(i,j)+50);
-				numberCell.css('left',getPosLeft(i,j)+50);
+				numberCell.css('top',getPosTop(i,j)+cellWidth*0.5);
+				numberCell.css('left',getPosLeft(i,j)+cellWidth*0.5);
 			}
 			else{
-				numberCell.css('width','100px');
-				numberCell.css('height','100px');
+				numberCell.css('width',cellWidth);
+				numberCell.css('height',cellWidth);
 				numberCell.css('top',getPosTop(i,j));
 				numberCell.css('left',getPosLeft(i,j));
 				numberCell.css('background-color',getBgColor(nums[i][j]));
 				numberCell.text(nums[i][j]);
 			}
-			superPosition[i][j]=false;
+			hasConflicted[i][j]=false;
+
+			$('.number-cell').css('border-radius',cellWidth*0.06);
+			$('.number-cell').css('font-size',cellWidth*0.5);
+			$('.number-cell').css('line-height',cellWidth+'px');
 		}
 	}
 }
@@ -122,10 +149,60 @@ $(document).keydown(function (event) {
 			}
 			break;
 		default:
+			gameOver();
 			break;
 	}
 });
 
+
+//实现触摸滑动响应
+document.addEventListener('touchstart',function (event) {
+	startx=event.touches[0].pageX;
+	starty=event.touches[0].pageY;
+});
+
+document.addEventListener('touchend',function (event) {
+	endx=event.changedTouches[0].pageX;
+	endy=event.changedTouches[0].pageY;
+
+	//判断滑动方向
+	var deltax=endx-startx;
+	var deltay=endy-starty;
+
+	//判断滑动的距离小于移动临界值时不做任何操作
+	if(Math.abs(deltax)<documentWidth*0.05&&Math.abs(deltay)<documentWidth*0.05){
+		return;
+	}
+
+	if(Math.abs(deltax)>=Math.abs(deltay)){//水平方向
+		if(deltax>0){//向右
+			if (canMoveRight(nums)){
+				moveRight();
+				setTimeout('generateOneNumber()',200);
+			}
+		}
+		else{//向左
+			if (canMoveLeft(nums)){
+				moveLeft();
+				setTimeout('generateOneNumber()',200);
+			}
+		}
+	}
+	else{//垂直方向
+		if(deltay<0){//向上
+			if (canMoveUp(nums)){
+				moveUp();
+				setTimeout('generateOneNumber()',200);
+			}
+		}
+		else{//向下
+			if (canMoveDown(nums)) {
+				moveDown();
+				setTimeout('generateOneNumber()',200);
+			}
+		}
+	}
+});
 /*
 	向左移动
     需要对每一个数字的左边进行判断：
@@ -134,7 +211,7 @@ $(document).keydown(function (event) {
 */
 function moveLeft() {
 	for(var i=0;i<4;i++){
-		for(var j=1;j<4;j++){
+		for(var j=0;j<4;j++){
 			if(nums[i][j]!==0){
 				for(var k=0;k<j;k++){
 					if(nums[i][k]===0&&noBlockH(i,k,j,nums)){//第i行的第k-j列之间是否有障碍物
@@ -144,14 +221,14 @@ function moveLeft() {
 						nums[i][j]=0;
 						break;
 					}
-					else if(nums[i][k]===nums[i][j] && noBlockH(i,k,j,nums) && !superPosition[i][k]){
+					else if(nums[i][k]===nums[i][j] && noBlockH(i,k,j,nums) && !hasConflicted[i][k]){
 						showNumKeyMove(i,j,i,k);
 						nums[i][k]+=nums[i][j];
 						nums[i][j]=0;
 						//统计分数
 						score+=nums[i][k];
 						updateScore(score);
-						superPosition[i][k]=true;//已经叠加
+						hasConflicted[i][k]=true;//已经叠加
 						break;
 					}
 				}
@@ -172,14 +249,14 @@ function moveRight() {
 						nums[i][j]=0;
 						break;
 					}
-					else if(nums[i][k]===nums[i][j] && noBlockH(i,j,k,nums) && !superPosition[i][k]){
+					else if(nums[i][k]===nums[i][j] && noBlockH(i,j,k,nums) && !hasConflicted[i][k]){
 						showNumKeyMove(i,j,i,k);
 						nums[i][k]+=nums[i][j];
 						nums[i][j]=0;
 						//统计分数
 						score+=nums[i][k];
 						updateScore(score);
-						superPosition[i][k]=true;//已经叠加
+						hasConflicted[i][k]=true;//已经叠加
 						break;
 					}
 				}
@@ -190,7 +267,7 @@ function moveRight() {
 }
 function moveUp() {
 	for(var j=0;j<4;j++){
-		for(var i=0;i<4;i++){
+		for(var i=1;i<4;i++){
 			if(nums[i][j]!==0){
 				for(var g=0;g<i;g++){
 					if(nums[g][j] === 0 && noBlockV(j,g,i,nums)){
@@ -199,14 +276,14 @@ function moveUp() {
 						nums[i][j]=0;
 						break;
 					}
-					else if(nums[g][j]===nums[i][j] && noBlockV(j,g,i,nums) && !superPosition[g][j]){
+					else if(nums[g][j]===nums[i][j] && noBlockV(j,g,i,nums) && !hasConflicted[g][j]){
 						showNumKeyMove(i,j,g,j);
-						nums[g][j]+=nums[i][j];
+						setTimeout(nums[g][j]+=nums[i][j],500);
 						nums[i][j]=0;
 						//统计分数
 						score+=nums[g][j];
 						updateScore(score);
-						superPosition[g][j]=true;//已经叠加
+						hasConflicted[g][j]=true;//已经叠加
 						break;
 					}
 				}
@@ -226,14 +303,14 @@ function moveDown() {
 						nums[i][j]=0;
 						break;
 					}
-					else if(nums[g][j]===nums[i][j] && noBlockV(j,i,g,nums) && !superPosition[g][j]){
+					else if(nums[g][j]===nums[i][j] && noBlockV(j,i,g,nums) && !hasConflicted[g][j]){
 						showNumKeyMove(i,j,g,j);
-						nums[g][j]+=nums[i][j];
+						setTimeout(nums[g][j]+=nums[i][j],500);
 						nums[i][j]=0;
 						//统计分数
 						score+=nums[g][j];
 						updateScore(score);
-						superPosition[g][j]=true;//已经叠加
+						hasConflicted[g][j]=true;//已经叠加
 						break;
 					}
 				}
