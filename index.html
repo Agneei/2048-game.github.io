@@ -5,6 +5,7 @@
     <title>2048 小游戏</title>
     <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1,user-scalable=no">
     <link href="https://fonts.googleapis.com/css?family=Lobster|Arapey|Fauna One" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
     <script src="js/jquery-3.4.1.js"></script>
     <script src="js/common%20.js"></script>
@@ -45,6 +46,11 @@
             <div class="grid-cell" id="grid-cell-3-1"></div>
             <div class="grid-cell" id="grid-cell-3-2"></div>
             <div class="grid-cell" id="grid-cell-3-3"></div>
+        </div>
+        <div class="end active" id="end">
+             &nbsp;&nbsp;&nbsp;&nbsp;啊！你死了！
+            <div class="ghost">👻</div>
+            <button class="btn" ><a href="javascript:newgame()">再试一次</a></button>
         </div>
         <div id="audioBox">
             <audio autoplay="autoplay" src="music/limbo%20-%20airplane%20mode.mp3"></audio>

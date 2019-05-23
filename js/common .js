@@ -1,19 +1,16 @@
-//移动端尺寸
+
 var screenWidth=window.screen.availWidth;
-var documentWidth=document.documentElement.clientWidth;//页面DOM宽度
-var containerWidth=documentWidth*0.92;//容器宽度
+var documentWidth=document.documentElement.clientWidth;
+var containerWidth=documentWidth*0.92;
 var cellWidth=documentWidth*0.18;
 var cellSpace=documentWidth*0.04;
 
-//获取上边位置
 function getPosTop(i,j) {
 	return cellSpace+(cellWidth+cellSpace)*i;
 }
-//获取左边位置
 function getPosLeft(i,j){
 	return cellSpace+(cellWidth+cellSpace)*j;
 }
-//获取数字背景颜色方式
 function getBgColor(num){
 	switch(num){
 		case 2:
@@ -44,14 +41,12 @@ function getBgColor(num){
 			return "green";
 	}
 }
-//获取数字颜色方式
 function getNumberColor() {
 	if(nums>512){
 		return "#fff";
 	}
 }
 
-//判断是否没有空间
 function noSpace(nums){
 	for(var i=0;i<4;i++){
 		for(var j=0;j>4;j++){
@@ -62,7 +57,6 @@ function noSpace(nums){
 	}
 	return false;
 }
-//左移
 function canMoveLeft(nums) {
 	for(var i=0;i<4;i++){
 		for(var j=1;j<4;j++){
@@ -75,7 +69,6 @@ function canMoveLeft(nums) {
 	}
 	return false;
 }
-//右移
 function canMoveRight(nums) {
 	for(var i=0;i<4;i++){
 		for(var j=0;j<4;j++){
@@ -88,7 +81,6 @@ function canMoveRight(nums) {
 	}
 	return false;
 }
-//上移
 function canMoveUp(nums) {
 	for(var i=1;i<4;i++) {
 		for (var j = 0; j < 4; j++) {
@@ -101,7 +93,6 @@ function canMoveUp(nums) {
 	}
 	return false;
 }
-//下移
 function canMoveDown(nums) {
 	for(var i=0;i<3;i++){
 		for(var j=0;j<4;j++){
@@ -114,7 +105,6 @@ function canMoveDown(nums) {
 	}
 	return false;
 }
-//判断水平方向上是否有障碍物
 function noBlockH(row,col1,col2,nums) {
 	for(var j=col1+1;j<col2;j++){
 		if (nums[row][j]!==0){
@@ -123,7 +113,6 @@ function noBlockH(row,col1,col2,nums) {
 	}
 	return true;
 }
-//判断垂直方向上是否有障碍物
 function noBlockV(col,row1,row2,nums) {
 	for(var i=row1+1;i<row2;i++){
 		if (nums[i][col]!==0){
@@ -132,12 +121,16 @@ function noBlockV(col,row1,row2,nums) {
 	}
 	return true;
 }
-//更新分数
 function  updateScore(score) {
 	$('#score').text(score);
 }
 
-//游戏已结束
 function gameOver() {
-
+	for(var i=0;i<4;i++){
+		for(var j=0;j<4;j++){
+			if(nums[i][j]!==0&&(nums[i][j]!==nums[i][j+1]||nums[i][j]!==nums[i+1][j])){
+				$('#end').css('display','block');
+			}
+		}
+	}
 }

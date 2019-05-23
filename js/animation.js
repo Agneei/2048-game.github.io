@@ -10,7 +10,7 @@ function showNumberMove(i,j,randNumber) {
         height:cellWidth,
         top:getPosTop(i,j),
         left:getPosLeft(i,j),
-    },500);
+    },300);
 }
 //通过动画显示移动
 function showNumKeyMove(fromX,fromY,toX,toY){

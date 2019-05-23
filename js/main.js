@@ -115,7 +115,7 @@ function generateOneNumber() {
 	var randX=Math.floor(temp[pos]/4);
 	var randY=Math.floor(temp[pos]%4);
 	//随机一个数字
-	var randNum=Math.random()<0.5?2:4;
+	var randNum=Math.random()<0.9?2:4;
 	//在随机位置上显示随机数字
 	nums[randX][randY]=randNum;
 	showNumberMove(randX,randY,randNum);
