@@ -31,23 +31,23 @@ function getBgColor(num){
 		case 128:
 			return "lightpink";
 		case 256:
-			return "pink";
+			return "palevioletred";
 		case 512:
 			return "hotpink";
 		case 1024:
 			return " deeppink";
 		case 2048:
-			return "purple";
+			return "rosybrown";
 		case 4096:
 			return "lightyellow";
 		case 8192:
-			return "yellow";
+			return "green";
 	}
 }
 //获取数字颜色方式
 function getNumberColor() {
-	if(nums<4){
-		return "#fffff";
+	if(nums>512){
+		return "#fff";
 	}
 }
 
