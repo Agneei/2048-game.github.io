@@ -42,7 +42,6 @@ body{
     font-family: "Lobster", "Candara Light", "Arial", "sans-serif";
 }
 .title{
-    margin-top: 20px;
     font-size: 3em;
     color: paleturquoise;
     text-shadow: 2px 2px lightpink;
@@ -136,9 +135,6 @@ h3 a:hover{
     cursor: pointer;
     box-shadow: 1px 1px rgba(176,221,140,0.49);
 }
-#audioBox{
-    overflow: hidden;
-}
 .end {
     opacity: 0;
     position: absolute;
@@ -166,33 +162,30 @@ h3 a:hover{
     -webkit-transition: opacity 0.3s ease-in-out;
     transition: opacity 0.3s ease-in-out;
 }
+.end btn {
+    margin-top: 1rem;
+}
 .end.active {
     opacity: 1;
     z-index: 1000;
-    color: #1B9AAA;
-    font-weight: bold;
-    text-align: center;
-    font-family: 'ZCOOL KuaiLe', cursive;
-    display: none;
 }
+
 .ghost {
     font-size: 3rem;
     margin: 1rem 0;
 }
+
 .btn {
     font-family: inherit;
     font-size: 1rem;
+    border: none;
     background: #1B9AAA;
     letter-spacing: 1px;
+    color: white;
     font-weight: 300;
     padding: 0.9em 1.5em;
     border-radius: 3px;
-    border: 1px solid transparent;
     cursor: pointer;
-}
-.btn a{
-
-    color: white;
 }
 .btn:hover {
     background-color: #14727e;
@@ -203,4 +196,33 @@ h3 a:hover{
 .btn:focus {
     box-shadow: 0 0 10px #0d4a52 inset;
     outline: none;
+}
+
+.not-recommended {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-top: 3rem;
+}
+.not-recommended * + * {
+    margin-left: 10px;
+}
+.not-recommended__item + .not-recommended__annotation:before {
+    font-size: 30px;
+    content: "😐";
+}
+.not-recommended__item:hover + .not-recommended__annotation:before {
+    content: "😟";
+}
+.not-recommended__item:focus + .not-recommended__annotation:before {
+    content: "😄";
+}
+.not-recommended__item:active + .not-recommended__annotation:before {
+    content: "😨";
 }

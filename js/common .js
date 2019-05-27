@@ -126,11 +126,15 @@ function  updateScore(score) {
 }
 
 function gameOver() {
-	for(var i=0;i<4;i++){
-		for(var j=0;j<4;j++){
-			if(nums[i][j]!==0&&(nums[i][j]!==nums[i][j+1]||nums[i][j]!==nums[i+1][j])){
-				$('#end').css('display','block');
-			}
-		}
+	if (nums.filter(function (number) {
+		return number === null;
+	}).length === 0) {
+		var sameNeighbors = nums.find(function (tile, i) {
+			var isRightSame = nums[i + 1] && (i + 1) % 4 !== 0 ? tile.value === nums[i + 1].value : false;
+			var isDownSame = nums[i + 4] ? tile.value === nums[i + 4].value : false;
+			return isRightSame || isDownSame;
+
+		});
+		return !sameNeighbors;
 	}
 }

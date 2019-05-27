@@ -115,7 +115,7 @@ function generateOneNumber() {
 	var randX=Math.floor(temp[pos]/4);
 	var randY=Math.floor(temp[pos]%4);
 	//随机一个数字
-	var randNum=Math.random()<0.9?2:4;
+	var randNum=Math.random()<0.7?2:4;
 	//在随机位置上显示随机数字
 	nums[randX][randY]=randNum;
 	showNumberMove(randX,randY,randNum);
@@ -149,8 +149,22 @@ $(document).keydown(function (event) {
 			}
 			break;
 		default:
-			gameOver();
 			break;
+	}
+	nums = nums.map(function (tile, index) {
+		if (tile) {
+			return _extends({}, tile, {
+				index: index
+			});
+		} else {
+			return null;
+		}
+	});
+	updateView();
+	if (gameOver()) {
+		setTimeout(function () {
+			endDiv.classList.add('active');
+		}, 800);
 	}
 });
 
